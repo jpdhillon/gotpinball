@@ -1,0 +1,22 @@
+<% layout('layouts/boilerplate') -%> 
+
+<div class="card mt-5" style="width: 60rem;">
+  <div class="card-body"> 
+    <h5 class="card-title"><b>Name:</b> <%= location.name %></h5>
+    <p class="card-text"><b>Address:</b> <%= location.street %><br><%= location.city + ", " + location.state + " " + location.zip + " " + location.country %></p>
+    <p class="card-text"><b>Phone:</b> <%= location.phone %></p>
+    <p class="card-text"><b>Website:</b> <a href="<%= location.website %>"><%= location.website %></a></p>
+  </div>
+</div>
+
+<div class="card" style="width: 60rem;">
+  <div class="card-header">
+    Pinball Machines at this location:
+  </div>
+  <ul class="list-group list-group-flush">
+    <% for (i=0; i < locationMachines.length; i++) {%> 
+      <li class="list-group-item"><b>Name:</b> <%= locationMachines[i].name %><br>Manufactured by <%= locationMachines[i].manufacturer %> in <%= locationMachines[i].year %>.<br><b>Internet Pinball Database Link:</b> <a href="<%= locationMachines[i].ipdb_link %>"><%= locationMachines[i].ipdb_link %></a><br><br><img src="<%= locationMachines[i].opdb_img %>" alt=""></li>
+    <% } %> 
+  </ul>
+</div>
+

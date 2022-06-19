@@ -1,0 +1,7 @@
+<% layout('layouts/boilerplate') -%> 
+
+  <h1>This is the machines page!</h1>
+
+  <% for (i=0; i < machines.length; i++) {%> 
+    <li><%= machines[i].name %> </li>
+  <% } %>

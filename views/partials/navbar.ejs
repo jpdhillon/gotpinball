@@ -1,0 +1,58 @@
+<nav class="navbar bg-light static-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Find places and events to play pinball!</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Got Pinball</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/">Home</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="offcanvasNavbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Locations
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="offcanvasNavbarDropdown">
+              <li><a class="dropdown-item" href="#">Select region to search locations</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li>
+                <% for (i=0; i < regions.length; i++) { %> 
+                  <% const id = regions[i].name %>
+                  <a href="/locations/<%=id%>"><%= regions[i].full_name %></a><br>
+                <% } %>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="offcanvasNavbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Events
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="offcanvasNavbarDropdown">
+              <li><a class="dropdown-item" href="#">Select region to search events</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li>
+                <% for (i=0; i < regions.length; i++) { %> 
+                  <% const id = regions[i].name %>
+                  <a href="/events/<%=id%>"><%= regions[i].full_name %></a><br>
+                <% } %>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Register</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>

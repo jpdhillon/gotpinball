@@ -1,0 +1,17 @@
+<% layout('layouts/boilerplate') -%> 
+
+  <h1>These are the locations for the region!</h1>
+
+  <% for (i=0; i < locations.length; i++) {%> 
+    <div class="card" style="width: 18rem;">
+      <div class="card-body"> 
+        <% const id = locations[i].id %> 
+        <a href="/location/<%=id%>" class="card-link" > <%= locations[i].name %> </a>
+      </div>
+    </div>
+  <% } %> 
+
+
+<a class="btn btn-primary" href="/events/<%=thisRegion%>" role="button">Region Events</a>
+
+<a class="btn btn-primary" href="/links/<%=thisRegion%>" role="button">Region Links</a>

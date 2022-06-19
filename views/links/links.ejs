@@ -1,0 +1,14 @@
+<% layout('layouts/boilerplate') -%> 
+
+  <h1>These are the links for the region!</h1>
+
+  <% for (i=0; i < links.length; i++) {%> 
+    <div class="card" style="width: 60rem;">
+      <div class="card-body"> 
+        <h5 class="card-title"><b>Name:</b> <%= links[i].name %></h5>
+        <p class="card-text"><b>Website:</b> <a href="<%= links[i].url %>"><%= links[i].url %></a></p>
+        <p class="card-text"><b>Description:</b> <%= links[i].description %></p>
+        <p class="card-text"><b>Category:</b> <%= links[i].category %></p>
+      </div>
+    </div>
+  <% } %> 
