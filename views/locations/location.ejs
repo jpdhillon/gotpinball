@@ -39,12 +39,23 @@
   </form>
 </div>
 
-<% console.log(reviews) %> 
+<h2>Reviews:</h2>
+
 <% for(let review of reviews) { %>
-  <div class="mb-3">
+  <div class="mb-3 border">
     <p>Rating: <%= review.rating %>
     </p>
     <p>Review: <%= review.body %>
     </p>
+    <p>
+      <a href="/location/<%= review.locationId %>/reviews/<%= review._id %>/edit">Edit</a>
+    </p>
+    <p>
+      <form action="/location/<%= review.locationId %>/reviews/<%= review._id %>?_method=DELETE" method="POST">
+        <input class="form-control d-none" type="number" value="<%=review.locationId%>" name="review[locationId]" readonly>
+        <button>Delete</button>
+      </form>
+    </p>
+  
   </div>
   <% } %>

@@ -1,0 +1,25 @@
+<% layout('layouts/boilerplate') -%> 
+
+<div>
+  <h2>Edit Review</h2>
+  
+  <form action="/location/<%=review.locationId%>/reviews/<%=review._id%>?_method=PUT" method="POST" class="mb-3 validated-form" novalidate>
+    <input class="form-control d-none" type="text" value="<%=review._id%>" name="review[_id]" readonly>
+    <input class="form-control d-none" type="number" value="<%=review.locationId%>" name="review[locationId]" readonly>
+    <div class="mb-3">
+        <label class="form-label" for="rating">Rating</label>
+        <input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating" placeholder="<%= review.rating %>">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="body">Review</label>
+        <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3" placeholder="<%= review.body %>" required></textarea>
+        <div class="valid-feedback">
+            Looks good!
+        </div>
+    </div>
+    <button class="btn btn-success">Update Review</button>
+  </form>
+
+  <a href="/location/<%=review.locationId%>">Back to Location</a>
+
+</div>

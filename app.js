@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const axios = require('axios');
 const ejsMate = require('ejs-mate');
 const Review = require('./models/review');
+const methodOverride = require('method-override');
 
 mongoose.connect('mongodb://localhost:27017/gotPinball', {
   useNewUrlParser: true,
@@ -23,6 +24,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride('_method'));
 
 const getRegions = async () => {
   try {
@@ -128,8 +130,29 @@ app.get('/location/:id', async (req, res) => {
 app.post('/location/:id/reviews', async (req, res) => {
   const review = new Review(req.body.review);
   await review.save();
-  res.redirect(`/location/${req.body.review.locationId}`);
+  locationId = req.body.review.locationId;
+  res.redirect(`/location/${locationId}`);
 })
+
+app.get('/location/:id/reviews/:id/edit', async (req, res) => {
+  const regions = await getRegions();
+  const review = await Review.findById(req.params.id);
+  res.render('locations/editReview', { regions, review });
+});
+
+app.put('/location/:id/reviews/:id', async (req, res) => {
+  const { id } = req.params;
+  const review = await Review.findByIdAndUpdate(id, { ...req.body.review });
+  locationId = req.body.review.locationId;
+  res.redirect(`/location/${locationId}`);
+});
+
+app.delete('/location/:id/reviews/:id', async (req, res) => {
+  const { id } = req.params;
+  await Review.findByIdAndDelete(id);
+  locationId = req.body.review.locationId;
+  res.redirect(`/location/${locationId}`);
+});
 
 app.get('/events/:id', async (req, res) => {
   const regions = await getRegions();
