@@ -3,23 +3,26 @@ const path = require('path');
 const mongoose = require('mongoose');
 const axios = require('axios');
 const ejsMate = require('ejs-mate');
+const Review = require('./models/review');
 
-//mongoose.connect('mongodb://localhost:27017/find-pinball', {
-//  useNewUrlParser: true,
-//  useUnifiedTopology: true
-//});
+mongoose.connect('mongodb://localhost:27017/gotPinball', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 
-//const db = mongoose.connection;
-//db.on("error", console.error.bind(console, "connection error:"));
-//db.once("open", () => {
-//  console.log("Database connected");
-//});
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error:"));
+db.once("open", () => {
+  console.log("Database connected");
+});
 
 const app = express();
 
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+app.use(express.urlencoded({ extended: true }));
 
 const getRegions = async () => {
   try {
@@ -93,6 +96,14 @@ const getMachines = async () => {
   }
 }
 
+const getReviews = async (req) => {
+  try {
+    const reviews = await Review.find({locationId: req.params.id});
+    return reviews;
+  } catch (e) {
+    console.log("Error:", e);
+  }
+}
 
 app.get('/', async (req, res) => {
   const regions = await getRegions();
@@ -109,9 +120,16 @@ app.get('/locations/:id', async (req, res) => {
 app.get('/location/:id', async (req, res) => {
   const regions = await getRegions();
   const locationAndMachines = await getLocation(req);
+  const reviews = await getReviews(req);
   const [location, locationMachines] = locationAndMachines;
-  res.render('locations/location', { regions, location, locationMachines });
+  res.render('locations/location', { regions, location, locationMachines, reviews });
 });
+
+app.post('/location/:id/reviews', async (req, res) => {
+  const review = new Review(req.body.review);
+  await review.save();
+  res.redirect(`/location/${req.body.review.locationId}`);
+})
 
 app.get('/events/:id', async (req, res) => {
   const regions = await getRegions();
