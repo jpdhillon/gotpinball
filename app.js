@@ -5,6 +5,8 @@ const axios = require('axios');
 const ejsMate = require('ejs-mate');
 const Review = require('./models/review');
 const methodOverride = require('method-override');
+const catchAsync = require('./utils/catchAsync');
+const ExpressError = require('./utils/ExpressError');
 
 mongoose.connect('mongodb://localhost:27017/gotPinball', {
   useNewUrlParser: true,
@@ -107,75 +109,81 @@ const getReviews = async (req) => {
   }
 }
 
-app.get('/', async (req, res) => {
+app.get('/', catchAsync(async (req, res) => {
   const regions = await getRegions();
   res.render('home', { regions });
-});
+}));
 
-app.get('/locations/:id', async (req, res) => {
+app.get('/locations/:id', catchAsync(async (req, res) => {
   const regions = await getRegions();
   const thisRegion = req.params.id;
   const locations = await getLocations(req);
   res.render('locations/locations', { regions, locations, thisRegion });
-});
+}));
 
-app.get('/location/:id', async (req, res) => {
+app.get('/location/:id', catchAsync(async (req, res) => {
   const regions = await getRegions();
   const locationAndMachines = await getLocation(req);
   const reviews = await getReviews(req);
   const [location, locationMachines] = locationAndMachines;
   res.render('locations/location', { regions, location, locationMachines, reviews });
-});
+}));
 
-app.post('/location/:id/reviews', async (req, res) => {
+app.post('/location/:id/reviews', catchAsync(async (req, res) => {
   const review = new Review(req.body.review);
   await review.save();
   locationId = req.body.review.locationId;
   res.redirect(`/location/${locationId}`);
-})
+}));
 
-app.get('/location/:id/reviews/:id/edit', async (req, res) => {
+app.get('/location/:id/reviews/:id/edit', catchAsync(async (req, res) => {
   const regions = await getRegions();
   const review = await Review.findById(req.params.id);
   res.render('locations/editReview', { regions, review });
-});
+}));
 
-app.put('/location/:id/reviews/:id', async (req, res) => {
+app.put('/location/:id/reviews/:id', catchAsync(async (req, res) => {
   const { id } = req.params;
   const review = await Review.findByIdAndUpdate(id, { ...req.body.review });
   locationId = req.body.review.locationId;
   res.redirect(`/location/${locationId}`);
-});
+}));
 
-app.delete('/location/:id/reviews/:id', async (req, res) => {
+app.delete('/location/:id/reviews/:id', catchAsync(async (req, res) => {
   const { id } = req.params;
   await Review.findByIdAndDelete(id);
   locationId = req.body.review.locationId;
   res.redirect(`/location/${locationId}`);
-});
+}));
 
-app.get('/events/:id', async (req, res) => {
+app.get('/events/:id', catchAsync(async (req, res) => {
   const regions = await getRegions();
   const events = await getEvents(req);
   res.render('events/events', { regions, events });
-});
+}));
 
-app.get('/links/:id', async (req, res) => {
+app.get('/links/:id', catchAsync(async (req, res) => {
   const regions = await getRegions();
   const links = await getLinks(req);
   res.render('links/links', { regions, links });
-});
+}));
 
-app.get('/machines', async (req, res) => {
+app.get('/machines', catchAsync(async (req, res) => {
   const regions = await getRegions();
   const machines = await getMachines();
   res.render('machines/machines', { regions, machines });
+}));
+
+app.all('*', (req, res, next) => {
+  next(new ExpressError('Page Not Found', 404))
 });
 
-app.get('/error', async (req, res) => {
+app.use(catchAsync(async (err, req, res, next) => {
   const regions = await getRegions();
-  res.render('error', { regions });
-});
+  const { statusCode = 500 } = err;
+  if (!err.message) err.message = 'Oh No, Something Went Wrong!';
+  res.status(statusCode).render('error', { err, regions });
+}));
 
 app.listen(3000, () => {
   console.log("Listening on port 3000!");
