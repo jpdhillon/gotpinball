@@ -26,8 +26,10 @@ app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
+
 
 const validateReview = (res, req, next) => {
   const { error } = reviewSchema.validate(req.body);
@@ -117,6 +119,7 @@ const getMachines = async () => {
   try {
     const res = await axios.get('https://pinballmap.com/api/v1/machines.json');
     const machines = res.data.machines;
+    machines.sort((a, b) => a.name.localeCompare(b.name));
     return machines;
   } catch (e) {
     console.log("Error:", e);
@@ -134,7 +137,7 @@ const getReviews = async (req) => {
 
 app.get('/', catchAsync(async (req, res) => {
   const regions = await getRegions();
-  res.render('home', { regions });
+  res.render('home/home', { regions });
 }));
 
 app.get('/locations/:id', catchAsync(async (req, res) => {
