@@ -13,9 +13,7 @@
             <p class="card-text">
               <b>Name:</b> <%= machinesPerPage[i].name %><br>Manufactured by <%= machinesPerPage[i].manufacturer %> in <%= machinesPerPage[i].year %>.<br><b>Internet Pinball Database Link:</b> <a href="<%= machinesPerPage[i].ipdb_link %>"><%= machinesPerPage[i].ipdb_link %></a>
             </p>
-            
-              <a href="/machine/<%= machinesPerPage[i].id %> " class="btn btn-primary">Find This Machine!</a>
-
+            <a href="/machine/<%= machinesPerPage[i].id %> " class="btn btn-primary">Find This Machine!</a>
           </div>
         </div>
       </div>
