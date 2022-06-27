@@ -1,0 +1,17 @@
+<% layout('layouts/boilerplate') -%> 
+
+  <% if (machineLocations.length !== 0) { %>
+    <h1 class="mx-3">You can find this machine at the following locations!</h1>
+    <% for (i=0; i < machineLocations.length; i++) {%> 
+    <div class="card" style="width: 18rem;">
+      <div class="card-body"> 
+        <% const id = machineLocations[i].id %> 
+        <a href="/location/<%=id%>" class="card-link" > <%= machineLocations[i].name %> </a>
+      </div>
+    </div>
+    <% } %> 
+  <% } else { %>
+    <h1>Sorry, We Have No Locations for This Machine</h2>
+  <% } %>
+
+  

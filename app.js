@@ -51,14 +51,10 @@ const getRegions = async () => {
   }
 }
 
-const getLocations = async (req) => {
+const getLocations = async (thisRegion) => {
   try {
-    const res = await axios.get('https://pinballmap.com/api/v1/region/' + req.params.id + '/locations.json');
+    const res = await axios.get('https://pinballmap.com/api/v1/region/' + thisRegion + '/locations.json');
     const locations = res.data.locations;
-    if (typeof(locations) === 'undefined') {
-      const msg = 'Page Not Found';
-      throw new ExpressError(msg, 404)
-    }
     return locations;
   } catch (e) {
     console.log("Error:", e);
@@ -71,10 +67,6 @@ const getLocation = async (req, res) => {
     const location = res.data;
     const res2 = await axios.get('https://pinballmap.com/api/v1/locations/' + req.params.id + '/machine_details.json');
     const locationMachines = res2.data.machines;
-    if (typeof(locationMachines) === 'undefined') {
-      const msg = 'Page Not Found';
-      throw new ExpressError(msg, 404)
-    }
     const res3 = await axios.get('https://pinballmap.com/api/v1/machines.json');
     const machines = res3.data.machines;
     for (var i = 0; i < locationMachines.length; i++) {
@@ -95,10 +87,6 @@ const getEvents = async (req) => {
   try {
     const res = await axios.get('https://pinballmap.com/api/v1/region/' + req.params.id + '/events.json');
     const events = res.data.events;
-    if (typeof(events) === 'undefined') {
-      const msg = 'Page Not Found';
-      throw new ExpressError(msg, 404)
-    }
     return events;
   } catch (e) {
     console.log("Error:", e);
@@ -126,6 +114,16 @@ const getMachines = async () => {
   }
 }
 
+const getMachineLocations = async (machineId) => {
+  try {
+    const res = await axios.get('https://pinballmap.com/api/v1/locations.json?by_machine_id=' + machineId + '&no_details=0');
+    const machineLocations = res.data.locations;
+    return machineLocations;
+  } catch (e) {
+    console.log("Error:", e);
+  }
+};
+
 const getReviews = async (req) => {
   try {
     const reviews = await Review.find({locationId: req.params.id});
@@ -143,21 +141,13 @@ app.get('/', catchAsync(async (req, res) => {
 app.get('/locations/:id', catchAsync(async (req, res) => {
   const regions = await getRegions();
   const thisRegion = req.params.id;
-  const locations = await getLocations(req);
-  if (typeof(locations) === 'undefined') {
-    const err = {stack: null, message: 'Page Not Found'};
-    res.render('error', { regions, err });
-  }
+  const locations = await getLocations(thisRegion);
   res.render('locations/locations', { regions, locations, thisRegion });
 }));
 
 app.get('/location/:id', catchAsync(async (req, res) => {
   const regions = await getRegions();
   const locationAndMachines = await getLocation(req);
-  if (typeof(locationAndMachines) === 'undefined') {
-    const err = {stack: null, message: 'Page Not Found'};
-    res.render('error', { regions, err });
-  }
   const reviews = await getReviews(req);
   const [location, locationMachines] = locationAndMachines;
   res.render('locations/location', { regions, location, locationMachines, reviews });
@@ -193,27 +183,38 @@ app.delete('/location/:id/reviews/:id', catchAsync(async (req, res) => {
 app.get('/events/:id', catchAsync(async (req, res) => {
   const regions = await getRegions();
   const events = await getEvents(req);
-  if (typeof(events) === 'undefined') {
-    const msg = 'Page Not Found';
-    throw new ExpressError(msg, 404)
-  }
   res.render('events/events', { regions, events });
 }));
 
 app.get('/links/:id', catchAsync(async (req, res) => {
   const regions = await getRegions();
   const links = await getLinks(req);
-  if (typeof(links) === 'undefined') {
-    const msg = 'Page Not Found';
-    throw new ExpressError(msg, 404)
-  };
   res.render('links/links', { regions, links });
 }));
 
-app.get('/machines', catchAsync(async (req, res) => {
+app.get('/machines/:page', catchAsync(async (req, res) => {
   const regions = await getRegions();
-  const machines = await getMachines();
-  res.render('machines/machines', { regions, machines });
+  // Declaring variable
+  const resPerPage = 100; // results per page
+  const page = req.params.page || 1; // page number
+  const skip = (resPerPage * page) - resPerPage; // value
+  const limit = resPerPage; // limit value
+  const machines = await getMachines(); // all machines results from API
+  const totalMachines = machines.length;
+  const machinesPerPage = machines.slice(skip, (skip+limit)); // the results per page
+  res.render('machines/machines', { 
+    regions: regions, 
+    machinesPerPage: machinesPerPage,
+    currentPage: page,
+    pages: Math.ceil(totalMachines / resPerPage)
+   });
+}));
+
+app.get('/machine/:id', catchAsync(async (req, res) => {
+  const regions = await getRegions();
+  const machineId = req.params.id;
+  const machineLocations = await getMachineLocations(machineId);
+  res.render('machines/machineLocations', {regions, machineLocations});
 }));
 
 app.all('*', (req, res, next) => {
