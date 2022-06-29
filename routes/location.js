@@ -61,6 +61,10 @@ router.get('/:id', catchAsync(async (req, res) => {
   const regions = await getRegions();
   const locationAndMachines = await getLocation(req);
   const reviews = await getReviews(req);
+  if (!locationAndMachines) {
+    req.flash('error', 'Cannot find that location!');
+    return res.redirect('/');
+  }
   const [location, locationMachines] = locationAndMachines;
   res.render('location/location', { regions, location, locationMachines, reviews });
 }));
@@ -69,6 +73,7 @@ router.post('/:id/reviews', validateReview, catchAsync(async (req, res) => {
   const review = new Review(req.body.review);
   await review.save();
   locationId = req.body.review.locationId;
+  req.flash('success', 'Successfully submitted review!');
   res.redirect(`/location/${locationId}`);
 }));
 
@@ -82,6 +87,7 @@ router.put('/:id/reviews/:id', validateReview, catchAsync(async (req, res) => {
   const { id } = req.params;
   const review = await Review.findByIdAndUpdate(id, { ...req.body.review });
   locationId = req.body.review.locationId;
+  req.flash('success', 'Successfully edited review!');
   res.redirect(`/location/${locationId}`);
 }));
 
@@ -89,6 +95,7 @@ router.delete('/:id/reviews/:id', catchAsync(async (req, res) => {
   const { id } = req.params;
   await Review.findByIdAndDelete(id);
   locationId = req.body.review.locationId;
+  req.flash('success', 'Successfully deleted review!');
   res.redirect(`/location/${locationId}`);
 }));
 

@@ -28,6 +28,10 @@ router.get('/:id', catchAsync(async (req, res) => {
   const regions = await getRegions();
   const thisRegion = req.params.id;
   const locations = await getLocations(thisRegion);
+  if (!locations) {
+    req.flash('error', 'Cannot find that Region!');
+    return res.redirect('/');
+  }
   res.render('locations/locations', { regions, locations, thisRegion });
 }));
 

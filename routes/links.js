@@ -27,6 +27,10 @@ const getLinks = async (req) => {
 router.get('/:id', catchAsync(async (req, res) => {
   const regions = await getRegions();
   const links = await getLinks(req);
+  if (!links) {
+    req.flash('error', 'Cannot find that Region to Look for Links!');
+    return res.redirect('/');
+  }
   res.render('links/links', { regions, links });
 }));
 

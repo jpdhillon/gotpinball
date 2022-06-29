@@ -27,6 +27,10 @@ const getEvents = async (req) => {
 router.get('/:id', catchAsync(async (req, res) => {
   const regions = await getRegions();
   const events = await getEvents(req);
+  if (!events) {
+    req.flash('error', 'Cannot find that Region to Look for Events!');
+    return res.redirect('/');
+  }
   res.render('events/events', { regions, events });
 }));
 
