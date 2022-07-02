@@ -2,21 +2,8 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const catchAsync = require('../utils/catchAsync');
-const ExpressError = require('../utils/ExpressError');
-const {reviewSchema} = require('../joiSchemas.js');
 const Review = require('../models/review');
-const { isLoggedIn } = require('../middleware');
-
-
-const validateReview = (res, req, next) => {
-  const { error } = reviewSchema.validate(req.body);
-  if (error) {
-    const msg = error.details.map(el => el.message).join(',');
-    throw new ExpressError(msg, 400)
-  } else {
-    next();
-  }
-}
+const { isLoggedIn, isAuthor, validateReview } = require('../middleware');
 
 const getLocation = async (req, res) => {
   try {
@@ -74,12 +61,12 @@ router.post('/:id/reviews', isLoggedIn, validateReview, catchAsync(async (req, r
   res.redirect(`/location/${locationId}`);
 }));
 
-router.get('/:id/reviews/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
+router.get('/:id/reviews/:id/edit', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
   const review = await Review.findById(req.params.id);
   res.render('location/editReview', { review });
 }));
 
-router.put('/:id/reviews/:id', isLoggedIn, validateReview, catchAsync(async (req, res) => {
+router.put('/:id/reviews/:id', isLoggedIn, validateReview, isAuthor, catchAsync(async (req, res) => {
   const { id } = req.params;
   const review = await Review.findByIdAndUpdate(id, { ...req.body.review });
   locationId = req.body.review.locationId;
@@ -87,7 +74,7 @@ router.put('/:id/reviews/:id', isLoggedIn, validateReview, catchAsync(async (req
   res.redirect(`/location/${locationId}`);
 }));
 
-router.delete('/:id/reviews/:id', isLoggedIn, catchAsync(async (req, res) => {
+router.delete('/:id/reviews/:id', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
   const { id } = req.params;
   await Review.findByIdAndDelete(id);
   locationId = req.body.review.locationId;

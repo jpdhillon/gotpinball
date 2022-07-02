@@ -19,6 +19,14 @@
       <% } %> 
     </ul>
   </div>
+
+  <% if(currentUser) {%> 
+    <div class="row justify-content-evenly px-2">
+      <div class="col-6">
+        <a href="/location/<%= location.id %>/reviews">Leave a Review</a>
+      </div>
+    </div>
+  <% } %> 
   
   <div class="row justify-content-evenly px-2">
     <div class="col-6">
@@ -30,22 +38,19 @@
       <p>Review: <%= review.body %>
       </p>
       <p>Review submitted by <%= review.author.username %> </p>
-      <p>
-        <a href="/location/<%= review.locationId %>/reviews/<%= review._id %>/edit">Edit</a>
-      </p>
-      <p>
-        <form action="/location/<%= review.locationId %>/reviews/<%= review._id %>?_method=DELETE" method="POST">
-          <input class="form-control d-none" type="number" value="<%=review.locationId%>" name="review[locationId]" readonly>
-          <button>Delete</button>
-        </form>
-      </p>
+      
+      <% if(currentUser && review.author.equals(currentUser._id)) {%> 
+        <div>
+          <a href="/location/<%= review.locationId %>/reviews/<%= review._id %>/edit">Edit</a>
+          <form action="/location/<%= review.locationId %>/reviews/<%= review._id %>?_method=DELETE" method="POST">
+            <input class="form-control d-none" type="number" value="<%=review.locationId%>" name="review[locationId]" readonly>
+            <button>Delete</button>
+          </form>
+        </div>
+      <% } %> 
     </div>
     <% } %>
     </div>
   </div>
 
-  <div class="row justify-content-evenly px-2">
-    <div class="col-6">
-      <a href="/location/<%= location.id %>/reviews">Leave a Review</a>
-    </div>
-  </div>
+  
