@@ -8,13 +8,18 @@ const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 const session = require('express-session');
 const flash = require('connect-flash');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const User = require('./models/user');
 
+const usersRoutes = require('./routes/users');
 const locationsRoutes = require('./routes/locations');
 const locationRoutes = require('./routes/location');
 const eventsRoutes = require('./routes/events');
 const linksRoutes = require('./routes/links');
 const machinesRoutes = require('./routes/machines');
 const machineRoutes = require('./routes/machine');
+
 
 mongoose.connect('mongodb://localhost:27017/gotPinball', {
   useNewUrlParser: true,
@@ -33,9 +38,9 @@ app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 const sessionConfig = {
   secret: 'thisshouldbeabettersecret!',
@@ -51,12 +56,37 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+const getRegions = async () => {
+  try {
+    const res = await axios.get('https://pinballmap.com/api/v1/regions.json');
+    const allRegions = res.data.regions;
+    return allRegions;
+  } catch (e) {
+    console.log("Error:", e);
+  }
+}
+
+getRegions().then((allRegions) => {
+  regions = allRegions;
+})
+
 app.use((req, res, next) => {
+  res.locals.regions = regions;
+  res.locals.currentUser = req.user;
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
   next();
-})
+});
 
+
+app.use('/', usersRoutes);
 app.use('/locations', locationsRoutes);
 app.use('/location', locationRoutes);
 app.use('/events', eventsRoutes);
@@ -64,30 +94,24 @@ app.use('/links', linksRoutes);
 app.use('/machines', machinesRoutes);
 app.use('/machine', machineRoutes);
 
-const getRegions = async () => {
-  try {
-    const res = await axios.get('https://pinballmap.com/api/v1/regions.json');
-    const regions = res.data.regions;
-    return regions;
-  } catch (e) {
-    console.log("Error:", e);
-  }
-}
+app.get('/fakeUser', async (req, res) => {
+  const user = new User({email: 'colttt@gmail.com', username: 'colttt'});
+  const newUser = await User.register(user, 'chicken');
+  res.send(newUser);
+})
 
-app.get('/', catchAsync(async (req, res) => {
-  const regions = await getRegions();
+app.get('/', (req, res) => {
   res.render('home/home', { regions });
-}));
+});
 
 app.all('*', (req, res, next) => {
   next(new ExpressError('Page Not Found', 404))
 });
 
-app.use(async (err, req, res, next) => {
-  const regions = await getRegions();
+app.use((err, req, res, next) => {
   const { statusCode = 500 } = err;
   if (!err.message) {err.message = 'Oh No, Something Went Wrong!'};
-  res.status(statusCode).render('error', { regions, err });
+  res.status(statusCode).render('error', { err });
 });
 
 app.listen(3000, () => {

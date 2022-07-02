@@ -52,9 +52,16 @@
             <a class="nav-link active" aria-current="page" href="/machines/1">Find Pinball Machines</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Register</a>
+            <div class="navbar-nav ms-auto">
+              <% if(!currentUser) {%>
+                <a class="nav-link" href="/login">Login</a>
+                <a class="nav-link" href="/register">Register</a>
+                <% } else {%> 
+                <a class="nav-link" href="/logout">Logout</a>
+                <% } %>         
+            </div>
           </li>
-          <li class="nav-item">
+          <li class="nav-item container-fluid">
             <img src="/navBar.jpg" class="img-fluid mt-4" alt="">
           </li>
         </ul>

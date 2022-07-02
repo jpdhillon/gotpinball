@@ -5,6 +5,8 @@ const catchAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/ExpressError');
 const {reviewSchema} = require('../joiSchemas.js');
 const Review = require('../models/review');
+const { isLoggedIn } = require('../middleware');
+
 
 const validateReview = (res, req, next) => {
   const { error } = reviewSchema.validate(req.body);
@@ -13,16 +15,6 @@ const validateReview = (res, req, next) => {
     throw new ExpressError(msg, 400)
   } else {
     next();
-  }
-}
-
-const getRegions = async () => {
-  try {
-    const res = await axios.get('https://pinballmap.com/api/v1/regions.json');
-    const regions = res.data.regions;
-    return regions;
-  } catch (e) {
-    console.log("Error:", e);
   }
 }
 
@@ -58,7 +50,6 @@ const getReviews = async (req) => {
 }
 
 router.get('/:id', catchAsync(async (req, res) => {
-  const regions = await getRegions();
   const locationAndMachines = await getLocation(req);
   const reviews = await getReviews(req);
   if (!locationAndMachines) {
@@ -66,10 +57,15 @@ router.get('/:id', catchAsync(async (req, res) => {
     return res.redirect('/');
   }
   const [location, locationMachines] = locationAndMachines;
-  res.render('location/location', { regions, location, locationMachines, reviews });
+  res.render('location/location', { location, locationMachines, reviews });
 }));
 
-router.post('/:id/reviews', validateReview, catchAsync(async (req, res) => {
+router.get('/:id/reviews', isLoggedIn, (req, res) => {
+  const id = req.params.id;
+  res.render('location/newReview', { id });
+});
+
+router.post('/:id/reviews', isLoggedIn, validateReview, catchAsync(async (req, res, next) => {
   const review = new Review(req.body.review);
   await review.save();
   locationId = req.body.review.locationId;
@@ -77,13 +73,12 @@ router.post('/:id/reviews', validateReview, catchAsync(async (req, res) => {
   res.redirect(`/location/${locationId}`);
 }));
 
-router.get('/:id/reviews/:id/edit', catchAsync(async (req, res) => {
-  const regions = await getRegions();
+router.get('/:id/reviews/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
   const review = await Review.findById(req.params.id);
-  res.render('location/editReview', { regions, review });
+  res.render('location/editReview', { review });
 }));
 
-router.put('/:id/reviews/:id', validateReview, catchAsync(async (req, res) => {
+router.put('/:id/reviews/:id', isLoggedIn, validateReview, catchAsync(async (req, res) => {
   const { id } = req.params;
   const review = await Review.findByIdAndUpdate(id, { ...req.body.review });
   locationId = req.body.review.locationId;
@@ -91,7 +86,7 @@ router.put('/:id/reviews/:id', validateReview, catchAsync(async (req, res) => {
   res.redirect(`/location/${locationId}`);
 }));
 
-router.delete('/:id/reviews/:id', catchAsync(async (req, res) => {
+router.delete('/:id/reviews/:id', isLoggedIn, catchAsync(async (req, res) => {
   const { id } = req.params;
   await Review.findByIdAndDelete(id);
   locationId = req.body.review.locationId;
