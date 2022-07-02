@@ -29,6 +29,7 @@
       </p>
       <p>Review: <%= review.body %>
       </p>
+      <p>Review submitted by <%= review.author.username %> </p>
       <p>
         <a href="/location/<%= review.locationId %>/reviews/<%= review._id %>/edit">Edit</a>
       </p>

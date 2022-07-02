@@ -42,7 +42,7 @@ const getLocation = async (req, res) => {
 
 const getReviews = async (req) => {
   try {
-    const reviews = await Review.find({locationId: req.params.id});
+    const reviews = await Review.find({locationId: req.params.id}).populate('author');
     return reviews;
   } catch (e) {
     console.log("Error:", e);
@@ -67,6 +67,7 @@ router.get('/:id/reviews', isLoggedIn, (req, res) => {
 
 router.post('/:id/reviews', isLoggedIn, validateReview, catchAsync(async (req, res, next) => {
   const review = new Review(req.body.review);
+  review.author = req.user._id;
   await review.save();
   locationId = req.body.review.locationId;
   req.flash('success', 'Successfully submitted review!');
