@@ -1,26 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const axios = require('axios');
+const links = require('../controllers/links');
 const catchAsync = require('../utils/catchAsync');
-const ExpressError = require('../utils/ExpressError');
 
-const getLinks = async (req) => {
-  try {
-    const res = await axios.get('https://pinballmap.com/api/v1/region/' + req.params.id + '/region_link_xrefs.json');
-    const links = res.data.regionlinks;
-    return links;
-  } catch (e) {
-    console.log("Error:", e);
-  }
-}
-
-router.get('/:id', catchAsync(async (req, res) => {
-  const links = await getLinks(req);
-  if (!links) {
-    req.flash('error', 'Cannot find that Region to Look for Links!');
-    return res.redirect('/');
-  }
-  res.render('links/links', { links });
-}));
+router.get('/:id', catchAsync(links.getLinks));
 
 module.exports = router;

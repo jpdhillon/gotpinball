@@ -1,5 +1,6 @@
 const {reviewSchema} = require('./joiSchemas.js');
 const ExpressError = require('./utils/ExpressError');
+const Review = require('./models/review');
 
 module.exports.isLoggedIn = (req, res, next) => {
   if(!req.isAuthenticated()) {
@@ -11,9 +12,8 @@ module.exports.isLoggedIn = (req, res, next) => {
 }
 
 module.exports.isAuthor = async(req, res, next) => {
-  const {id} = req.params;
-  console.log(id)
-  const review = await review.findById(id);
+  const {locationId, id} = req.params;
+  const review = await Review.findById(id);
   if(!review.author.equals(req.user._id)) {
     req.flash('error', "You don't have permission");
     return res.redirect('/:id');

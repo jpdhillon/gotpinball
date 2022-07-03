@@ -63,7 +63,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-const getRegions = async () => {
+const fetchRegions = async () => {
   try {
     const res = await axios.get('https://pinballmap.com/api/v1/regions.json');
     const allRegions = res.data.regions;
@@ -73,7 +73,7 @@ const getRegions = async () => {
   }
 }
 
-getRegions().then((allRegions) => {
+fetchRegions().then((allRegions) => {
   regions = allRegions;
 })
 
