@@ -31,5 +31,20 @@ module.exports.validateReview = (res, req, next) => {
   }
 }
 
+module.exports.isRated = (req, res, next) => {
+  if(req.body.review.rating == '0') {
+    const locationId = req.body.review.locationId;
+    const id = req.body.review._id;
+    if(req.method === 'POST'){
+      req.flash('error', 'You must enter rating before submitting review');
+      return res.redirect(`/location/${locationId}/reviews`);
+    } else {
+      req.flash('error', 'You must enter rating before updating review');
+      return res.redirect(`/location/${locationId}/reviews/${id}/edit`);
+    }
+  } else {
+    next();
+  }
+}
 
 
