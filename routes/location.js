@@ -6,14 +6,14 @@ const { isLoggedIn, isAuthor, validateReview } = require('../middleware');
 
 router.get('/:id', catchAsync(location.getLocation));
 
-router.get('/:id/reviews', isLoggedIn, location.renderNewReviewForm);
-
-router.post('/:id/reviews', isLoggedIn, validateReview, catchAsync(location.createReview));
+router.route('/:id/reviews')
+  .get(isLoggedIn, location.renderNewReviewForm)
+  .post(isLoggedIn, validateReview, catchAsync(location.createReview))
 
 router.get('/:id/reviews/:id/edit', isLoggedIn, isAuthor, catchAsync(location.renderEditReviewForm));
 
-router.put('/:id/reviews/:id', isLoggedIn, validateReview, isAuthor, catchAsync(location.updateReview));
-
-router.delete('/:id/reviews/:id', isLoggedIn, isAuthor, catchAsync(location.deleteReview));
+router.route('/:id/reviews/:id')
+  .put(isLoggedIn, validateReview, isAuthor, catchAsync(location.updateReview))
+  .delete(isLoggedIn, isAuthor, catchAsync(location.deleteReview))
 
 module.exports = router;
