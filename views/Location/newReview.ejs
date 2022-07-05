@@ -4,7 +4,7 @@
 <div class="row justify-content-evenly px-2">
   <div class="col-6">
     <h2 class="">Leave a Review</h2>
-    <form action="/location/<%=id%>/reviews" method="POST" novalidate class="mb-3 needs-validation">
+    <form action="/location/<%=id%>/reviews" method="POST" novalidate class="mb-3 needs-validation" enctype="multipart/form-data">
       <input class="form-control d-none" type="number" value="<%=id%>" name="review[locationId]" readonly>
       <fieldset class="starability-growRotate">
         <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
@@ -26,7 +26,15 @@
               Looks good!
           </div>
       </div>
-      <button class="btn btn-success">Submit</button>
+      <div class="input-group mb-3">
+        <label class="input-group-text" for="image">Add Your Images:</label>
+        <input type="file" class="form-control" id="image" name="image" multiple>
+      </div>
+      <div class="mb-3">
+        <button class="btn btn-success">Submit</button>
+      </div>
     </form>
+
+    <a href="/location/<%=id%>">Back to Location</a>
   </div>
 </div>

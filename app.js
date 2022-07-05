@@ -1,3 +1,7 @@
+if(process.env.NODE_ENV !== "production") {
+  require('dotenv').config();
+}
+
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
@@ -67,6 +71,7 @@ const fetchRegions = async () => {
   try {
     const res = await axios.get('https://pinballmap.com/api/v1/regions.json');
     const allRegions = res.data.regions;
+    allRegions.sort((a, b) => a.name.localeCompare(b.name));
     return allRegions;
   } catch (e) {
     console.log("Error:", e);

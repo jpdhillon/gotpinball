@@ -39,6 +39,27 @@
         Rated:  <%=review.rating%> stars
       </p>
       <p> <%= review.body %> </p>
+      
+      <div id="reviewCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <% review.images.forEach((img, i) => {  %>
+            <div class="carousel-item <%= i === 0 ? 'active' : ''%>">
+                <img src="<%= img.url%>" class="d-block w-100" alt="">
+            </div>
+            <% }) %>
+        </div>
+        <% if(review.images.length > 1) {%>
+        <button class="carousel-control-prev" type="button" data-bs-target="#reviewCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#reviewCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+        <% } %>
+      </div>
+        
       <% if(currentUser && review.author.equals(currentUser._id)) {%> 
         <div>
           <a href="/location/<%= review.locationId %>/reviews/<%= review._id %>/edit">Edit</a>

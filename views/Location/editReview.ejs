@@ -5,14 +5,14 @@
   <div class="col-6">
     <h2>Edit Review</h2>
   
-  <form action="/location/<%=review.locationId%>/reviews/<%=review._id%>?_method=PUT" method="POST" novalidate class="mb-3 needs-validation" >
+  <form action="/location/<%=review.locationId%>/reviews/<%=review._id%>?_method=PUT" method="POST" novalidate class="mb-3 needs-validation" enctype="multipart/form-data">
     <input class="form-control d-none" type="text" value="<%=review._id%>" name="review[_id]" readonly>
     <input class="form-control d-none" type="number" value="<%=review.locationId%>" name="review[locationId]" readonly>
     <p>Previously Rated:</p>
     <p class="starability-result" data-rating="<%=review.rating%>">
       <%=review.rating%>
     </p>
-    <p>Please Update Your Review:</p>
+    <p>Please Update Your Rating:</p>
     <fieldset class="starability-growRotate">
       <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
       <input type="radio" id="first-rate1" name="review[rating]" value="1" />
@@ -27,11 +27,24 @@
       <label for="first-rate5" title="Amazing">5 stars</label>
     </fieldset>
     <div class="mb-3">
-        <label class="form-label" for="body">Review</label>
+        <label class="form-label" for="body">Review:</label>
         <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3"  required><%= review.body %></textarea>
         <div class="valid-feedback">
             Looks good!
         </div>
+    </div>
+    <div class="input-group mb-3">
+      <label class="input-group-text" for="image">Add More Images:</label>
+      <input type="file" class="form-control" id="image" name="image" multiple>
+    </div>
+    <div class="mb-3">
+      <% review.images.forEach(function(img, i) { %>
+        <img src="<%=img.thumbnail%>" class="img-thumbnail" alt="">
+        <div class="form-check-inline">
+          <input type="checkbox" id="image-<%=i%>" name="deleteImages[]" value="<%=img.filename%>">
+        </div>
+        <label for="image-<%=i%>">Delete?</label>
+      <% }) %> 
     </div>
     <button class="btn btn-success">Update Review</button>
   </form>

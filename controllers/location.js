@@ -1,5 +1,6 @@
 const axios = require('axios');
 const Review = require('../models/review');
+const { cloudinary } = require("../cloudinary");
 
 const fetchLocation = async (req, res) => {
   try {
@@ -50,8 +51,10 @@ module.exports.renderNewReviewForm = (req, res) => {
 
 module.exports.createReview = async (req, res, next) => {
   const review = new Review(req.body.review);
+  review.images = req.files.map(f => ({ url: f.path, filename: f.filename }));
   review.author = req.user._id;
   await review.save();
+  console.log(review);
   locationId = req.body.review.locationId;
   req.flash('success', 'Successfully submitted review!');
   res.redirect(`/location/${locationId}`);
@@ -65,6 +68,15 @@ module.exports.renderEditReviewForm = async (req, res) => {
 module.exports.updateReview = async (req, res) => {
   const { id } = req.params;
   const review = await Review.findByIdAndUpdate(id, { ...req.body.review });
+  const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
+  review.images.push(...imgs);
+  await review.save();
+  if (req.body.deleteImages) {
+    for (let filename of req.body.deleteImages) {
+      await cloudinary.uploader.destroy(filename);
+    }
+    await review.updateOne({$pull: {images: {filename: {$in: req.body.deleteImages}}}})
+  };
   locationId = req.body.review.locationId;
   req.flash('success', 'Successfully edited review!');
   res.redirect(`/location/${locationId}`);
