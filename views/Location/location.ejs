@@ -31,6 +31,9 @@
   
   <div class="row justify-content-evenly px-2">
     <div class="col-6">
+    
+      <div id='map' style='width: 100%; height: 300px;'></div>
+
       <h2>Reviews:</h2>
   <% for(let review of reviews) { %>
     <div class="mb-3 border">
@@ -73,5 +76,14 @@
     <% } %>
     </div>
   </div>
+
+
+  <script type="text/javascript">
+    var location2 = <%- JSON.stringify(location)%>
+    const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
+
+  </script>
+
+<script src="/javascripts/showLocationMap.js"></script>
 
   

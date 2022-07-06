@@ -71,6 +71,10 @@ const fetchRegions = async () => {
   try {
     const res = await axios.get('https://pinballmap.com/api/v1/regions.json');
     const allRegions = res.data.regions;
+    for (i=0; i < allRegions.length; i++) {
+      allRegions[i].geometry = { type: "Point", coordinates: [allRegions[i].lon, allRegions[i].lat]};
+      allRegions[i].properties = { popUpMarkup: `<a href="/locations/${allRegions[i].name}">${allRegions[i].full_name}</a>`}
+    }
     allRegions.sort((a, b) => a.name.localeCompare(b.name));
     return allRegions;
   } catch (e) {

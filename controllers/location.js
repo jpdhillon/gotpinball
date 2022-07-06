@@ -1,11 +1,22 @@
 const axios = require('axios');
 const Review = require('../models/review');
 const { cloudinary } = require("../cloudinary");
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
+const mapBoxToken = process.env.MAPBOX_TOKEN;
+const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
+
+
 
 const fetchLocation = async (req, res) => {
   try {
     const res = await axios.get('https://pinballmap.com/api/v1/locations/' + req.params.id + '.json');
     const location = res.data;
+    const address = location.street + ", " + location.city + ", " + location.state + " " + location.zip;
+    const geoData = await geocoder.forwardGeocode({
+      query: address,
+      limit: 1
+    }).send()
+    location.geometry = geoData.body.features[0].geometry;
     const res2 = await axios.get('https://pinballmap.com/api/v1/locations/' + req.params.id + '/machine_details.json');
     const locationMachines = res2.data.machines;
     const res3 = await axios.get('https://pinballmap.com/api/v1/machines.json');
