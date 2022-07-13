@@ -65,7 +65,6 @@ module.exports.createReview = async (req, res, next) => {
   review.images = req.files.map(f => ({ url: f.path, filename: f.filename }));
   review.author = req.user._id;
   await review.save();
-  console.log(review);
   locationId = req.body.review.locationId;
   req.flash('success', 'Successfully submitted review!');
   res.redirect(`/location/${locationId}`);

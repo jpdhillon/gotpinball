@@ -1,15 +1,20 @@
 <% layout('layouts/boilerplate') -%> 
 <link rel="stylesheet" href="/stylesheets/stars.css">
 
-  <div class="card my-3 mx-auto" style="width: 35rem;">
-    <div class="card-body"> 
-      <h5 class="card-title"><b>Location Name:</b> <%= location.name %></h5>
-      <p class="card-text"><b>Address:</b> <%= location.street %><br><%= location.city + ", " + location.state + " " + location.zip + " " + location.country %></p>
-      <p class="card-text"><b>Phone:</b> <%= location.phone %></p>
-      <p class="card-text"><b>Website:</b> <a href="<%= location.website %>"><%= location.website %></a></p>
+
+    <div class="card mx-auto text-center m-3" style="width: 35rem;">
+      <div class="card-body"> 
+        <h5 class="card-title"><b>Location Name:</b> <%= location.name %></h5>
+        <p class="card-text"><b>Address:</b> <%= location.street %><br><%= location.city + ", " + location.state + " " + location.zip + " " + location.country %></p>
+        <p class="card-text"><b>Phone:</b> <%= location.phone %></p>
+        <p class="card-text"><b>Website:</b> <a href="<%= location.website %>"><%= location.website %></a></p>
+      </div>
     </div>
+
+  <div class="m-3 p-3 mx-auto">
+    <div id='map' style='width: 100%; height: 300px;'></div>
   </div>
-  
+
   <div class="card my-3 mx-auto" style="width: 50rem;">
     <div class="card-header">
       Pinball Machines at this location:
@@ -32,7 +37,7 @@
   <div class="row justify-content-evenly px-2">
     <div class="col-6">
     
-      <div id='map' style='width: 100%; height: 300px;'></div>
+      
 
       <h2>Reviews:</h2>
   <% for(let review of reviews) { %>

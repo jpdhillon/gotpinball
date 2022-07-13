@@ -3,16 +3,20 @@
   <h1 class="px-3">These are the events for the region!</h1>
 
   <div class="row bg-secondary bg-opacity-10 justify-content-evenly px-2">
-    <% for (i=0; i < events.length; i++) {%> 
-      <div class="card my-2" style="width: 60rem;">
-        <div class="card-body"> 
-          <h5 class="card-title"><b>Event:</b> <%= events[i].name %></h5>
-          <p class="card-text"><b>Description:</b> <%= events[i].long_desc %></p>
-          <p class="card-text"><b>Website:</b> <a href="<%= events[i].external_link %>"><%= events[i].external_link %></a></p>
-          <p class="card-text"><b>When:</b> <%= events[i].start_date %> to <%= events[i].end_date %></p>
-          <p class="card-text"><b>Category:</b> <%= events[i].category %></p>
+    <% if (events.length > 0) { %> 
+      <% for (i=0; i < events.length; i++) {%> 
+        <div class="card my-2" style="width: 60rem;">
+          <div class="card-body"> 
+            <h5 class="card-title"><b>Event:</b> <%= events[i].name %></h5>
+            <p class="card-text"><b>Description:</b> <%= events[i].long_desc %></p>
+            <p class="card-text"><b>Website:</b> <a href="<%= events[i].external_link %>"><%= events[i].external_link %></a></p>
+            <p class="card-text"><b>When:</b> <%= events[i].start_date %> to <%= events[i].end_date %></p>
+            <p class="card-text"><b>Category:</b> <%= events[i].category %></p>
+          </div>
         </div>
-      </div>
+      <% } %> 
+    <% } else { %>
+      <p>Sorry, currently no events for this region.</p>
     <% } %> 
   </div>
 
