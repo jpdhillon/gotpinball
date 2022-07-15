@@ -26,8 +26,9 @@ const linksRoutes = require('./routes/links');
 const machinesRoutes = require('./routes/machines');
 const machineRoutes = require('./routes/machine');
 
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/gotPinball';
 
-mongoose.connect('mongodb://localhost:27017/gotPinball', {
+mongoose.connect(dbUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
