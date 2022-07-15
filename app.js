@@ -15,6 +15,7 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
+const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 
 const usersRoutes = require('./routes/users');
@@ -65,6 +66,12 @@ const sessionConfig = {
 
 app.use(session(sessionConfig));
 app.use(flash());
+app.use(
+  helmet({
+      contentSecurityPolicy: false,
+      crossOriginEmbedderPolicy: false,
+  })
+);  
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -108,12 +115,6 @@ app.use('/events', eventsRoutes);
 app.use('/links', linksRoutes);
 app.use('/machines', machinesRoutes);
 app.use('/machine', machineRoutes);
-
-app.get('/fakeUser', async (req, res) => {
-  const user = new User({email: 'colttt@gmail.com', username: 'colttt'});
-  const newUser = await User.register(user, 'chicken');
-  res.send(newUser);
-})
 
 app.get('/', (req, res) => {
   res.render('home/home', { regions });
