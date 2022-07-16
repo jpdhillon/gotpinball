@@ -47,10 +47,10 @@ const fetchReviews = async (req) => {
 module.exports.getLocation = async (req, res) => {
   const locationAndMachines = await fetchLocation(req);
   const reviews = await fetchReviews(req);
-  if (!locationAndMachines) {
+  /* if (!locationAndMachines) {
     req.flash('error', 'Cannot find that location!');
     return res.redirect('/');
-  }
+  } */
   const [location, locationMachines] = locationAndMachines;
   res.render('location/location', { location, locationMachines, reviews });
 };
