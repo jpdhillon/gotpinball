@@ -52,7 +52,7 @@ module.exports.getLocation = async (req, res) => {
     return res.redirect('/');
   }
   const [location, locationMachines] = locationAndMachines;
-  res.render('location/location', { location, locationMachines, reviews });
+  res.render('/location/location', { location, locationMachines, reviews });
 };
 
 module.exports.renderNewReviewForm = (req, res) => {
