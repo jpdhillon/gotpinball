@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from '@/styles/Navbar.module.css';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const Navbar = () => {
   return (
@@ -12,13 +13,13 @@ const Navbar = () => {
       <nav>
         <ul className={styles.navLinks}>
           <li>
-            <a href="/">Home</a>
+            <Link href="/">Home</Link>
           </li>
           <li>
-            <a href="/pinballMachines">Pinball Machines</a>
+            <Link href="/pinballMachines">Pinball Machines</Link>
           </li>
           <li>
-            <a href="/eventsLinks">Events/Links</a>
+            <Link href="/eventsLinks">Events/Links</Link>
           </li>
         </ul>
       </nav>
