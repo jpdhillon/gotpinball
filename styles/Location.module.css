@@ -1,0 +1,52 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.leftColumn {
+  flex: 1;
+  font-size: 1.5rem;
+  margin: 1rem;
+  background-color: #f8f8f8;
+  border-radius: 5px;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.rightColumn {
+  flex: 1;
+  min-height: 400px;
+  background-color: #eee;
+  margin: 1rem;
+}
+
+.machinesGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1rem;
+}
+
+.card {
+  background-color: #f8f8f8;
+  border-radius: 5px;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.card h2 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.h2 {
+  margin-left: 1rem;
+  font-size: 1.75rem;
+}
