@@ -18,9 +18,9 @@ const Navbar = () => {
           <li>
             <Link href="/pinballMachines">Pinball Machines</Link>
           </li>
-          <li>
-            <Link href="/eventsLinks">Events/Links</Link>
-          </li>
+          {/* <li>
+            <Link href="#">Events/Links</Link>
+          </li> */}
         </ul>
       </nav>
     </header>
