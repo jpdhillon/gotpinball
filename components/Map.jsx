@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useCallback } from 'react';
 
 const Map = () => {
   const mapRef = useRef(null);
@@ -14,7 +15,7 @@ const Map = () => {
     if (regions.length > 0 && typeof window !== 'undefined' && window.isGoogleMapsApiLoaded) {
       initMap();
     }
-  }, [regions]);
+  }, [regions, initMap]);
 
   const fetchRegions = async () => {
     const response = await fetch('/api/allLocations');
@@ -22,7 +23,7 @@ const Map = () => {
     setRegions(data.regions);
   };
 
-  const initMap = () => {
+  const initMap = useCallback(() => {
     if (!window.google) {
       console.error('Google Maps API not loaded');
       return;
@@ -60,7 +61,7 @@ const Map = () => {
         });
       });
     });
-  };
+  }, [locations]);
 
   return (
     <div

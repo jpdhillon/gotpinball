@@ -2,19 +2,21 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import styles from '@/styles/RegionLocations.module.css'
+import { useCallback } from 'react'
 
 const RegionLocations = () => {
   const router = useRouter()
   const [region, setRegion] = useState({})
   const [locations, setLocations] = useState([])
 
+  const { lat, lon, name } = router.query
+
   useEffect(() => {
     if (router.isReady) {
-      const { lat, lon, name } = router.query
       setRegion({ lat, lon, name })
       fetchLocations(name)
     }
-  }, [router.isReady])
+  }, [router.isReady, lat, lon, name])
 
   const fetchLocations = async (regionName) => {
     const response = await fetch(`/api/regionSearch?name=${regionName}`)
@@ -29,7 +31,7 @@ const RegionLocations = () => {
     })
   }
 
-  const initMap = () => {
+  const initMap = useCallback(() => {
     if (
       typeof window === 'undefined' ||
       !window.google ||
@@ -80,7 +82,7 @@ const RegionLocations = () => {
         })
       })
     }
-  }
+  }, [locations])
 
   useEffect(() => {
     if (
@@ -90,7 +92,7 @@ const RegionLocations = () => {
     ) {
       initMap()
     }
-  }, [locations])
+  }, [locations, initMap])
 
   return (
     <div className={styles.container}>

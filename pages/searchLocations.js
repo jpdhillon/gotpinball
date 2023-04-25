@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import styles from '@/styles/SearchLocations.module.css'
+import { useCallback } from 'react'
 
 const SearchLocations = () => {
   const router = useRouter()
@@ -26,7 +27,7 @@ const SearchLocations = () => {
     ) {
       initMap()
     }
-  }, [locations])
+  }, [locations, initMap])
 
   const handleMarkerClick = (location) => {
     router.push({
@@ -35,7 +36,7 @@ const SearchLocations = () => {
     })
   }
 
-  const initMap = () => {
+  const initMap = useCallback(() => {
     if (
       typeof window === 'undefined' ||
       !window.google ||
@@ -89,7 +90,7 @@ const SearchLocations = () => {
 
       setMap(newMap)
     }
-  }
+  }, [locations])
 
   return (
     <div className={styles.container}>
