@@ -9,6 +9,16 @@ const SearchLocations = () => {
   const [locations, setLocations] = useState([])
   const [map, setMap] = useState(null)
 
+  const handleMarkerClick = useCallback(
+    (location) => {
+      router.push({
+        pathname: '/location',
+        query: { ...location },
+      })
+    },
+    [router]
+  )
+
   const initMap = useCallback(() => {
     if (
       typeof window === 'undefined' ||
@@ -83,13 +93,6 @@ const SearchLocations = () => {
       initMap()
     }
   }, [locations, initMap])
-
-  const handleMarkerClick = (location) => {
-    router.push({
-      pathname: '/location',
-      query: { ...location },
-    })
-  }
 
   return (
     <div className={styles.container}>

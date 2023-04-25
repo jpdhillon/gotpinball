@@ -14,6 +14,16 @@ const RegionLocations = () => {
     setLocations(data.locations)
   }
 
+  const handleMarkerClick = useCallback(
+    (location) => {
+      router.push({
+        pathname: '/location',
+        query: { ...location },
+      })
+    },
+    [router]
+  )
+
   const initMap = useCallback(() => {
     if (
       typeof window === 'undefined' ||
@@ -75,13 +85,6 @@ const RegionLocations = () => {
       fetchLocations(name)
     }
   }, [router.isReady, lat, lon, name])
-
-  const handleMarkerClick = (location) => {
-    router.push({
-      pathname: '/location',
-      query: { ...location },
-    })
-  }
 
   useEffect(() => {
     if (
