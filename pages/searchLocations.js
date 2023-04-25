@@ -1,40 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import styles from '@/styles/SearchLocations.module.css'
-import { useCallback } from 'react'
 
 const SearchLocations = () => {
   const router = useRouter()
   const [input, setInput] = useState('')
   const [locations, setLocations] = useState([])
   const [map, setMap] = useState(null)
-
-  useEffect(() => {
-    if (router.isReady) {
-      const { input, locations } = router.query
-      setInput(input)
-      setLocations(JSON.parse(locations))
-      initMap()
-    }
-  }, [router.isReady])
-
-  useEffect(() => {
-    if (
-      locations.length > 0 &&
-      typeof window !== 'undefined' &&
-      window.isGoogleMapsApiLoaded
-    ) {
-      initMap()
-    }
-  }, [locations, initMap])
-
-  const handleMarkerClick = (location) => {
-    router.push({
-      pathname: '/location',
-      query: { ...location },
-    })
-  }
 
   const initMap = useCallback(() => {
     if (
@@ -90,7 +63,33 @@ const SearchLocations = () => {
 
       setMap(newMap)
     }
-  }, [locations])
+  }, [locations, handleMarkerClick])
+
+  useEffect(() => {
+    if (router.isReady) {
+      const { input, locations } = router.query
+      setInput(input)
+      setLocations(JSON.parse(locations))
+      initMap()
+    }
+  }, [router.isReady, initMap, router.query])
+
+  useEffect(() => {
+    if (
+      locations.length > 0 &&
+      typeof window !== 'undefined' &&
+      window.isGoogleMapsApiLoaded
+    ) {
+      initMap()
+    }
+  }, [locations, initMap])
+
+  const handleMarkerClick = (location) => {
+    router.push({
+      pathname: '/location',
+      query: { ...location },
+    })
+  }
 
   return (
     <div className={styles.container}>

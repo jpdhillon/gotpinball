@@ -1,34 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import styles from '@/styles/RegionLocations.module.css'
-import { useCallback } from 'react'
 
 const RegionLocations = () => {
   const router = useRouter()
   const [region, setRegion] = useState({})
   const [locations, setLocations] = useState([])
 
-  const { lat, lon, name } = router.query
-
-  useEffect(() => {
-    if (router.isReady) {
-      setRegion({ lat, lon, name })
-      fetchLocations(name)
-    }
-  }, [router.isReady, lat, lon, name])
-
   const fetchLocations = async (regionName) => {
     const response = await fetch(`/api/regionSearch?name=${regionName}`)
     const data = await response.json()
     setLocations(data.locations)
-  }
-
-  const handleMarkerClick = (location) => {
-    router.push({
-      pathname: '/location',
-      query: { ...location },
-    })
   }
 
   const initMap = useCallback(() => {
@@ -82,7 +65,23 @@ const RegionLocations = () => {
         })
       })
     }
-  }, [locations])
+  }, [locations, handleMarkerClick, region.lat, region.lon])
+
+  const { lat, lon, name } = router.query
+
+  useEffect(() => {
+    if (router.isReady) {
+      setRegion({ lat, lon, name })
+      fetchLocations(name)
+    }
+  }, [router.isReady, lat, lon, name])
+
+  const handleMarkerClick = (location) => {
+    router.push({
+      pathname: '/location',
+      query: { ...location },
+    })
+  }
 
   useEffect(() => {
     if (

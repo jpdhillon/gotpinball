@@ -7,16 +7,6 @@ const Map = () => {
   const [regions, setRegions] = useState([]);
   const router = useRouter();
 
-  useEffect(() => {
-    fetchRegions();
-  }, []);
-
-  useEffect(() => {
-    if (regions.length > 0 && typeof window !== 'undefined' && window.isGoogleMapsApiLoaded) {
-      initMap();
-    }
-  }, [regions, initMap]);
-
   const fetchRegions = async () => {
     const response = await fetch('/api/allLocations');
     const data = await response.json();
@@ -61,7 +51,17 @@ const Map = () => {
         });
       });
     });
-  }, [locations]);
+  }, [regions, router]);
+
+  useEffect(() => {
+    fetchRegions();
+  }, []);
+
+  useEffect(() => {
+    if (regions.length > 0 && typeof window !== 'undefined' && window.isGoogleMapsApiLoaded) {
+      initMap();
+    }
+  }, [regions, initMap]);
 
   return (
     <div
