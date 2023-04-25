@@ -30,6 +30,14 @@ const RegionLocations = () => {
   }
 
   const initMap = () => {
+    if (
+      typeof window === 'undefined' ||
+      !window.google ||
+      locations.length === 0
+    ) {
+      return
+    }
+
     if (window.google && locations.length > 0) {
       const mapOptions = {
         center: {
@@ -82,7 +90,7 @@ const RegionLocations = () => {
     ) {
       initMap()
     }
-  }, [locations, window?.isGoogleMapsApiLoaded])
+  }, [locations])
 
   return (
     <div className={styles.container}>
