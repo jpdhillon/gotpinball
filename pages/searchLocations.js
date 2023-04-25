@@ -26,7 +26,7 @@ const SearchLocations = () => {
     ) {
       initMap()
     }
-  }, [locations, window?.isGoogleMapsApiLoaded])
+  }, [locations])
 
   const handleMarkerClick = (location) => {
     router.push({
@@ -36,6 +36,14 @@ const SearchLocations = () => {
   }
 
   const initMap = () => {
+    if (
+      typeof window === 'undefined' ||
+      !window.google ||
+      locations.length === 0
+    ) {
+      return
+    }
+
     if (window.google && locations.length > 0) {
       const mapOptions = {
         center: {
