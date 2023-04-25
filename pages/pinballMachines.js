@@ -3,11 +3,21 @@ import Image from 'next/image'
 import Link from 'next/link'
 import styles from '@/styles/PinballMachines.module.css'
 import Pagination from '@/components/Pagination'
+import { useRouter } from 'next/router'
 
 const PinballMachines = () => {
   const [machines, setMachines] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 20
+
+  const router = useRouter()
+
+  const handleFindMachine = (id, name) => {
+    router.push({
+      pathname: '/findMachines',
+      query: { id, name },
+    })
+  }
 
   useEffect(() => {
     const fetchMachines = async () => {
@@ -61,6 +71,11 @@ const PinballMachines = () => {
               {machine.ipdb_link && (
                 <Link href={machine.ipdb_link}>IPDB Link</Link>
               )}
+              <button
+                onClick={() => handleFindMachine(machine.id, machine.name)}
+              >
+                Find this machine
+              </button>
             </div>
           ))}
         </div>

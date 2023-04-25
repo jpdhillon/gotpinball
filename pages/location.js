@@ -13,7 +13,7 @@ const LocationPage = () => {
   useEffect(() => {
     if (id) {
       const fetchMachines = async () => {
-        const response = await fetch(`/api/machineLocations?id=${id}`)
+        const response = await fetch(`/api/locationMachines?id=${id}`)
         const data = await response.json()
         setMachines(data.machines)
       }
@@ -52,7 +52,7 @@ const LocationPage = () => {
                 {city}, {state} {zip}
               </p>
               <p>{phone}</p>
-              <Link href={website}>{website}</Link>
+              {website && <Link href={website}>{website}</Link>}
             </article>
             <div className={styles.rightColumn} ref={mapRef}></div>
           </div>

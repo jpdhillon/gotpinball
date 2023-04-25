@@ -1,10 +1,8 @@
 // pages/api/allLocations.js
 
-// pages/api/allLocations.js
-
 import axios from 'axios'
 
-export default async (req, res) => {
+export default async function handler(req, res) {
   try {
     const response = await axios.get(
       'http://pinballmap.com/api/v1/regions.json'
