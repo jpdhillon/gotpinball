@@ -2,11 +2,13 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import styles from '@/styles/RegionLocations.module.css'
+import { Loader } from '@googlemaps/js-api-loader'
 
 const RegionLocations = () => {
   const router = useRouter()
   const [region, setRegion] = useState({})
   const [locations, setLocations] = useState([])
+  const [apiLoaded, setApiLoaded] = useState(false)
 
   const fetchLocations = async (regionName) => {
     const response = await fetch(`/api/regionSearch?name=${regionName}`)
@@ -83,18 +85,31 @@ const RegionLocations = () => {
     if (router.isReady) {
       setRegion({ lat, lon, name })
       fetchLocations(name)
+
+      const loadGoogleMapsApi = async () => {
+        const loader = new Loader({
+          apiKey: 'AIzaSyBLohfUiW1DeqQ5pLPAlyl2wIkLPJZ_828',
+          version: 'weekly',
+          libraries: ['places'],
+        })
+
+        try {
+          await loader.load()
+          setApiLoaded(true)
+        } catch (error) {
+          console.error('Failed to load Google Maps API:', error)
+        }
+      }
+
+      loadGoogleMapsApi()
     }
   }, [router.isReady, lat, lon, name])
 
   useEffect(() => {
-    if (
-      locations.length > 0 &&
-      typeof window !== 'undefined' &&
-      window.isGoogleMapsApiLoaded
-    ) {
+    if (locations.length > 0 && apiLoaded) {
       initMap()
     }
-  }, [locations, initMap])
+  }, [locations, apiLoaded, initMap])
 
   return (
     <div className={styles.container}>

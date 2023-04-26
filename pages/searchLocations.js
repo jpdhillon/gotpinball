@@ -2,12 +2,14 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import styles from '@/styles/SearchLocations.module.css'
+import { Loader } from '@googlemaps/js-api-loader'
 
 const SearchLocations = () => {
   const router = useRouter()
   const [input, setInput] = useState('')
   const [locations, setLocations] = useState([])
   const [map, setMap] = useState(null)
+  const [apiLoaded, setApiLoaded] = useState(false)
 
   const handleMarkerClick = useCallback(
     (location) => {
@@ -80,19 +82,31 @@ const SearchLocations = () => {
       const { input, locations } = router.query
       setInput(input)
       setLocations(JSON.parse(locations))
-      initMap()
+
+      const loadGoogleMapsApi = async () => {
+        const loader = new Loader({
+          apiKey: 'AIzaSyBLohfUiW1DeqQ5pLPAlyl2wIkLPJZ_828',
+          version: 'weekly',
+          libraries: ['places'],
+        })
+
+        try {
+          await loader.load()
+          setApiLoaded(true)
+        } catch (error) {
+          console.error('Failed to load Google Maps API:', error)
+        }
+      }
+
+      loadGoogleMapsApi()
     }
-  }, [router.isReady, initMap, router.query])
+  }, [router.isReady, router.query])
 
   useEffect(() => {
-    if (
-      locations.length > 0 &&
-      typeof window !== 'undefined' &&
-      window.isGoogleMapsApiLoaded
-    ) {
+    if (locations.length > 0 && apiLoaded) {
       initMap()
     }
-  }, [locations, initMap])
+  }, [locations, apiLoaded, initMap])
 
   return (
     <div className={styles.container}>

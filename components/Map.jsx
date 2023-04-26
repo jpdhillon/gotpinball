@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
+import { Loader } from '@googlemaps/js-api-loader';
 
 const Map = () => {
   const mapRef = useRef(null);
@@ -14,12 +15,7 @@ const Map = () => {
   };
 
   const initMap = useCallback(() => {
-    if (!window.google) {
-      console.error('Google Maps API not loaded');
-      return;
-    }
-
-    const map = new window.google.maps.Map(mapRef.current, {
+    const map = new google.maps.Map(mapRef.current, {
       center: { lat: parseFloat(regions[37].lat), lng: parseFloat(regions[37].lon) },
       zoom: 4,
     });
@@ -38,7 +34,7 @@ const Map = () => {
       marker.addListener('click', () => {
         infoWindow.open(map, marker);
 
-        window.google.maps.event.addListener(infoWindow, 'domready', () => {
+        google.maps.event.addListener(infoWindow, 'domready', () => {
           document
             .getElementById(`info-window-content-${region.name}`)
             .addEventListener('click', (e) => {
@@ -53,15 +49,30 @@ const Map = () => {
     });
   }, [regions, router]);
 
+  const loadGoogleMapsApi = async () => {
+    const loader = new Loader({
+      apiKey: 'AIzaSyBLohfUiW1DeqQ5pLPAlyl2wIkLPJZ_828',
+      version: 'weekly',
+      libraries: ['places'],
+    });
+
+    try {
+      await loader.load();
+      initMap();
+    } catch (error) {
+      console.error('Failed to load Google Maps API:', error);
+    }
+  };
+
   useEffect(() => {
     fetchRegions();
   }, []);
 
   useEffect(() => {
-    if (regions.length > 0 && typeof window !== 'undefined' && window.isGoogleMapsApiLoaded) {
-      initMap();
+    if (regions.length > 0) {
+      loadGoogleMapsApi();
     }
-  }, [regions, initMap]);
+  }, [regions]);
 
   return (
     <div
@@ -72,6 +83,10 @@ const Map = () => {
 };
 
 export default Map;
+
+
+
+
 
 
 

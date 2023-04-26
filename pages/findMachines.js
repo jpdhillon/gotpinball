@@ -20,8 +20,6 @@ const FindMachines = () => {
     }
   }, [id])
 
-  console.log(locations) // Debugging the locations array
-
   return (
     <div className={styles.container}>
       {locations.length > 0 ? (

@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
+import { Loader } from '@googlemaps/js-api-loader'
 import Link from 'next/link'
 import styles from '@/styles/Location.module.css'
 
@@ -8,7 +9,12 @@ const LocationPage = () => {
   const { id, name, lat, lon, street, city, state, zip, phone, website } =
     router.query || {}
   const [machines, setMachines] = useState([])
-  const mapRef = useRef()
+  const mapRef = useRef(null)
+  const setMapRef = useCallback((node) => {
+    if (node !== null) {
+      mapRef.current = node
+    }
+  }, [])
 
   useEffect(() => {
     if (id) {
@@ -22,23 +28,34 @@ const LocationPage = () => {
   }, [id])
 
   useEffect(() => {
-    if (
-      typeof window !== 'undefined' &&
-      window.isGoogleMapsApiLoaded &&
-      lat &&
-      lon
-    ) {
-      const map = new google.maps.Map(mapRef.current, {
-        center: { lat: parseFloat(lat), lng: parseFloat(lon) },
-        zoom: 15,
-      })
+    if (lat && lon && mapRef.current) {
+      const loadGoogleMapsApi = async () => {
+        const loader = new Loader({
+          apiKey: 'AIzaSyBLohfUiW1DeqQ5pLPAlyl2wIkLPJZ_828',
+          version: 'weekly',
+          libraries: ['places'],
+        })
 
-      new google.maps.Marker({
-        position: { lat: parseFloat(lat), lng: parseFloat(lon) },
-        map,
-      })
+        try {
+          await loader.load()
+
+          const map = new google.maps.Map(mapRef.current, {
+            center: { lat: parseFloat(lat), lng: parseFloat(lon) },
+            zoom: 15,
+          })
+
+          new google.maps.Marker({
+            position: { lat: parseFloat(lat), lng: parseFloat(lon) },
+            map,
+          })
+        } catch (error) {
+          console.error('Failed to load Google Maps API:', error)
+        }
+      }
+
+      loadGoogleMapsApi()
     }
-  }, [lat, lon])
+  }, [lat, lon, mapRef])
 
   return (
     <div className={styles.container}>

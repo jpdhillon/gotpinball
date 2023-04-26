@@ -11,11 +11,12 @@ export default async function handler(req, res) {
     const locations = response.data.locations.map((location) => ({
       id: location.id,
       name: location.name,
+      lat: location.lat,
+      lon: location.lon,
       street: location.street,
+      city: location.city,
       state: location.state,
       zip: location.zip,
-      lon: location.lon,
-      lat: location.lat,
       phone: location.phone,
       website: location.website,
     }))
