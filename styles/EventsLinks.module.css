@@ -1,0 +1,43 @@
+.heading {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-top: 0.05rem;
+  padding-bottom: 0.05rem;
+  margin-bottom: 1rem;
+  background-color: #7C77A6;
+}
+
+.menu {
+  margin-left: 15rem;
+  margin-bottom: 1rem;
+}
+
+.events {
+  margin-top: 2rem;
+  margin-left: 2rem;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.card {
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 350px;
+}
+
+.card h3 {
+  margin-top: 0;
+}
+
+.img {
+  display: block;
+  max-width: 100%;
+}
+

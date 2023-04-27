@@ -52,13 +52,16 @@ const Navbar = () => {
             <Link href="/pinballMachines">Pinball Machines</Link>
           </li>
           <li>
+            <Link href="/eventsLinks">Events</Link>
+          </li>
+          <li>
             <div className={styles.searchContainer}>
               <input
                 type="text"
                 placeholder="Search Locations"
                 value={searchValue}
                 onChange={handleSearchInputChange}
-                onKeyPress={handleKeyPress}
+                onKeyDown={handleKeyPress}
               />
             </div>
           </li>
