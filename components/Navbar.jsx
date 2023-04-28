@@ -4,11 +4,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { Fragment } from "react";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 const Navbar = () => {
   const [searchValue, setSearchValue] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const router = useRouter();
+  const { data: session } = useSession();
 
   const handleSearchInputChange = (event) => {
     setSearchValue(event.target.value);
@@ -63,6 +66,21 @@ const Navbar = () => {
                 onChange={handleSearchInputChange}
                 onKeyDown={handleKeyPress}
               />
+            </div>
+          </li>
+          <li>
+            <div>
+              {session ? (
+        <Fragment>
+          <span>Signed in as {session.user.email}</span>
+          <button onClick={() => signOut()}>Sign out</button>
+        </Fragment>
+      ) : (
+        <Fragment>
+          <span>You are not signed in </span>
+          <button onClick={() => signIn()}>Sign in</button>
+        </Fragment>
+      )}
             </div>
           </li>
         </ul>

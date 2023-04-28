@@ -3,15 +3,21 @@ import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import styles from '@/styles/Layout.module.css'
 import Script from 'next/script'
+import { SessionProvider } from 'next-auth/react'
 
-export default function App({ Component, pageProps }) {
+export default function App({
+  Component,
+  pageProps: { session, ...pageProps },
+}) {
   return (
-    <div className={styles.layout}>
-      <Navbar className={styles.navbar} />
-      <main className={styles.main}>
-        <Component {...pageProps} />
-      </main>
-      <Footer />
-    </div>
+    <SessionProvider session={session}>
+      <div className={styles.layout}>
+        <Navbar className={styles.navbar} />
+        <main className={styles.main}>
+          <Component {...pageProps} />
+        </main>
+        <Footer />
+      </div>
+    </SessionProvider>
   )
 }

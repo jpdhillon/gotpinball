@@ -1,7 +1,7 @@
 // /pages/api/events.js
 import axios from 'axios'
 
-export default async (req, res) => {
+export default async function handler(req, res) {
   if (req.method === 'GET') {
     const regionName = req.query.region
 
