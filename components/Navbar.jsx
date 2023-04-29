@@ -43,14 +43,13 @@ const Navbar = () => {
   return (
     <header className={styles.navbar}>
       <div className={styles.logo}>
-        <Image src="/pinball.svg" alt="logo" width={35} height={35} />
-        <h1>Got Pinball</h1>
+        <Link href="/">
+            <Image src="/pinball.svg" alt="logo" width={35} height={35} />
+            <h1>Got Pinball</h1>
+        </Link>
       </div>
       <nav>
         <ul className={styles.navLinks}>
-          <li>
-            <Link href="/">Home</Link>
-          </li>
           <li>
             <Link href="/pinballMachines">Pinball Machines</Link>
           </li>
@@ -72,13 +71,13 @@ const Navbar = () => {
             <div>
               {session ? (
         <Fragment>
-          <span>Signed in as {session.user.email}</span>
-          <button onClick={() => signOut()}>Sign out</button>
+          <span className={styles.navSpan}>Signed in as {session.user.email}</span>
+          <button onClick={() => signOut()} className={styles.navButton}>Sign out</button>
         </Fragment>
       ) : (
         <Fragment>
-          <span>You are not signed in </span>
-          <button onClick={() => signIn()}>Sign in</button>
+          <span className={styles.navSpan}>You are not signed in </span>
+          <button onClick={() => signIn()} className={styles.navButton}>Sign in</button>
         </Fragment>
       )}
             </div>

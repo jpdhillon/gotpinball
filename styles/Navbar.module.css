@@ -12,6 +12,11 @@
   display: inline;
 }
 
+.logo a {
+  text-decoration: none;
+  color: inherit;
+}
+
 .navLinks {
   list-style-type: none;
   padding: 0;
@@ -25,4 +30,22 @@
 .navLinks a {
   color: #fff;
   text-decoration: none;
+}
+
+.navSpan {
+  margin-right: .25rem;
+  color: #fff;
+}
+
+.navButton {
+  background-color: #D64848;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .navLinks li:not(:last-child) {
+    display: none;
+  }
 }
