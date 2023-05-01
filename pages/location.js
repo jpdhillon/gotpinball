@@ -3,6 +3,8 @@ import { useEffect, useState, useRef, useCallback } from 'react'
 import { Loader } from '@googlemaps/js-api-loader'
 import Link from 'next/link'
 import styles from '@/styles/Location.module.css'
+import { useSession } from 'next-auth/react'
+import ReviewForm from '@/components/ReviewForm'
 
 const LocationPage = () => {
   const router = useRouter()
@@ -88,6 +90,7 @@ const LocationPage = () => {
           </div>
         </>
       )}
+      <ReviewForm />
     </div>
   )
 }

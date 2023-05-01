@@ -36,3 +36,10 @@ model VerificationToken {
   @@unique([identifier, token])
   @@map("verification_tokens")
 }
+
+model Review {
+  id             String   @id @default(cuid())   
+  userReview     String   @db.Text
+  locationName   String   @unique
+  userName       String?    
+}

@@ -5,10 +5,7 @@ import styles from '@/styles/Layout.module.css'
 import Script from 'next/script'
 import { SessionProvider } from 'next-auth/react'
 
-export default function App({
-  Component,
-  pageProps: { session, ...pageProps },
-}) {
+function MyApp({ Component, pageProps, session }) {
   return (
     <SessionProvider session={session}>
       <div className={styles.layout}>
@@ -21,3 +18,5 @@ export default function App({
     </SessionProvider>
   )
 }
+
+export default MyApp
