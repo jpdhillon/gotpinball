@@ -1,6 +1,8 @@
 .container {
   display: flex;
   flex-direction: column;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .columns {
@@ -32,6 +34,15 @@
   flex-wrap: wrap;
   gap: 1rem;
   margin: 1rem;
+}
+
+.reviewsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 0.5fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+  margin-left: 1rem;
+  font-size: 1.25rem;
 }
 
 .card {

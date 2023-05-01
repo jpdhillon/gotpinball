@@ -40,6 +40,8 @@ model VerificationToken {
 model Review {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId   
   userReview     String   
-  locationName   String   @unique
-  userName       String?    
+  locationName   String   
+  createdAt      DateTime @default(now())
+  userName       String? 
+  @@map("reviews")
 }

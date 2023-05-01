@@ -46,8 +46,7 @@ const PinballMachines = () => {
           src='/pinballRow.jpg'
           alt='Pinball row'
           layout='fill'
-          objectFit='cover'
-          objectPosition='center'
+          style={{ objectFit: 'cover', objectPosition: 'center' }}
         />
         <div className={styles.titleBar}>
           <h1>View pinball machines, listed alphabetically</h1>

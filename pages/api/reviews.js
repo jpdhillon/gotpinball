@@ -1,25 +1,42 @@
-// pages/api/reviews.js
-import { getSession } from 'next-auth/react'
 import prisma from '../../lib/prisma'
 
 export default async function handler(req, res) {
-  const session = await getSession({ req })
-
-  if (req.method === 'GET') {
-    const { locationName } = req.query
-
-    try {
-      const reviews = await prisma.review.findMany({
-        where: {
-          locationName: locationName,
-        },
-      })
-
-      res.status(200).json(reviews)
-    } catch (error) {
-      res.status(500).json({ error: 'Unable to fetch reviews.' })
-    }
+  if (req.method === 'POST') {
+    return await addReview(req, res)
+  } else if (req.method === 'GET') {
+    return await readReviews(req, res)
   } else {
-    res.status(405).json({ error: 'Method not allowed.' })
+    return res.status(405).json({ message: 'Method not allowed' })
+  }
+}
+
+async function readReviews(req, res) {
+  const { locationName } = req.query
+  try {
+    const reviews = await prisma.review.findMany({
+      where: {
+        locationName: locationName,
+      },
+    })
+    return res.status(200).json(reviews)
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ error: 'Error reading from database' })
+  }
+}
+
+async function addReview(req, res) {
+  const { userReview, locationName } = req.body
+  try {
+    const newReview = await prisma.review.create({
+      data: {
+        userReview: userReview,
+        locationName: locationName,
+      },
+    })
+    return res.status(200).json(newReview)
+  } catch (error) {
+    console.error('Request error', error)
+    res.status(500).json({ error: 'Error adding review' })
   }
 }

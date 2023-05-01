@@ -19,6 +19,23 @@ const LocationPage = () => {
     }
   }, [])
 
+  function formatDate(dateString) {
+    const date = new Date(dateString)
+    const options = {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    }
+
+    return date.toLocaleDateString('en-US', options)
+  }
+
+  const fetchReviews = async () => {
+    const response = await fetch(`/api/reviews?locationName=${name}`)
+    const data = await response.json()
+    setReviews(data)
+  }
+
   useEffect(() => {
     if (id) {
       const fetchMachines = async () => {
@@ -62,11 +79,6 @@ const LocationPage = () => {
 
   useEffect(() => {
     if (name) {
-      const fetchReviews = async () => {
-        const response = await fetch(`/api/reviews?locationName=${name}`)
-        const data = await response.json()
-        setReviews(data)
-      }
       fetchReviews()
     }
   }, [name])
@@ -108,13 +120,14 @@ const LocationPage = () => {
           {reviews.map((review) => (
             <div key={review.id} className={styles.card}>
               <p>{review.userReview}</p>
+              <p>Review submitted on {formatDate(review.createdAt)}</p>
             </div>
           ))}
         </div>
       ) : (
         <p>No reviews for this location. Be the first to write a review!</p>
       )}
-      <ReviewForm />
+      <ReviewForm name={name} onReviewSubmitted={fetchReviews} />
     </div>
   )
 }

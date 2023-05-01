@@ -1,0 +1,31 @@
+.review {
+  color: #fff;
+  margin: 1.5rem;
+}
+
+.signIn {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.signIn h2 {
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+.signIn button {
+  background-color: #fff;
+  color: #D64848;
+  font-size: 2rem;
+  border: #fff;
+  border-radius: .75rem;
+}
+
+.signIn button:hover {
+  background-color: pink;
+}
+

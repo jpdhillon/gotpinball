@@ -32,62 +32,64 @@ const EventsLinks = () => {
   return (
     <>
       <PureCSSLoader />
-      <img src='/event2.jpg' alt='event' className={styles.img} />
-      <div className={styles.heading}>
-        <h1>Select region to see events: </h1>
-      </div>
-      <div className={styles.menu}>
-        <div className='pure-menu pure-menu-scrollable custom-restricted'>
-          <ul className='pure-menu-list'>
-            {locations.map((location) => (
-              <li
-                key={location.id}
-                className='pure-menu-item'
-                onClick={() => handleRegionClick(location.name)}
-              >
-                <a href='#' className='pure-menu-link'>
-                  {location.name}
-                </a>
-              </li>
-            ))}
-          </ul>
+      <div className={styles.container}>
+        <img src='/event2.jpg' alt='event' className={styles.img} />
+        <div className={styles.heading}>
+          <h1>Select region to see events: </h1>
         </div>
-        <style jsx>{`
-          .custom-restricted {
-            height: 160px;
-            width: 150px;
-            border: 1px solid gray;
-            border-radius: 4px;
-            overflow-y: scroll;
-          }
-        `}</style>
-      </div>
-      {selectedRegion && (
-        <div className={styles.events}>
-          <h2>These are events for the {selectedRegion} region:</h2>
-          <div className={styles.cards}>
-            {events.map((event, index) => (
-              <div key={index} className={styles.card}>
-                <h3>Event: {event.name || 'N/A'}</h3>
-                <p>Description: {event.long_desc || 'N/A'}</p>
-                {event.external_link && (
-                  <p>
-                    External Link:{' '}
-                    <a
-                      href={event.external_link}
-                      target='_blank'
-                      rel='noopener noreferrer'
-                    >
-                      {event.external_link}
-                    </a>
-                  </p>
-                )}
-                <p>Date: {event.start_date || 'N/A'}</p>
-              </div>
-            ))}
+        <div className={styles.menu}>
+          <div className='pure-menu pure-menu-scrollable custom-restricted'>
+            <ul className='pure-menu-list'>
+              {locations.map((location) => (
+                <li
+                  key={location.id}
+                  className='pure-menu-item'
+                  onClick={() => handleRegionClick(location.name)}
+                >
+                  <a href='#' className='pure-menu-link'>
+                    {location.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
+          <style jsx>{`
+            .custom-restricted {
+              height: 160px;
+              width: 150px;
+              border: 1px solid gray;
+              border-radius: 4px;
+              overflow-y: scroll;
+            }
+          `}</style>
         </div>
-      )}
+        {selectedRegion && (
+          <div className={styles.events}>
+            <h2>These are events for the {selectedRegion} region:</h2>
+            <div className={styles.cards}>
+              {events.map((event, index) => (
+                <div key={index} className={styles.card}>
+                  <h3>Event: {event.name || 'N/A'}</h3>
+                  <p>Description: {event.long_desc || 'N/A'}</p>
+                  {event.external_link && (
+                    <p>
+                      External Link:{' '}
+                      <a
+                        href={event.external_link}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                      >
+                        {event.external_link}
+                      </a>
+                    </p>
+                  )}
+                  <p>Date: {event.start_date || 'N/A'}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </>
   )
 }

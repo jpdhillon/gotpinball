@@ -6,6 +6,7 @@ import Search from '@/components/Search'
 import dynamic from 'next/dynamic'
 import { useEffect } from 'react'
 import GoMachines from '@/components/GoMachines'
+import SignIn from '@/components/SignIn'
 
 const DynamicMap = dynamic(() => import('../components/Map'), { ssr: false })
 
@@ -37,7 +38,9 @@ export default function Home() {
             <div className={styles.top}>
               <GoMachines />
             </div>
-            <div className={styles.bottom}></div>
+            <div className={styles.bottom}>
+              <SignIn />
+            </div>
           </div>
         </div>
       </main>
