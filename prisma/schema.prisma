@@ -38,8 +38,8 @@ model VerificationToken {
 }
 
 model Review {
-  id             String   @id @default(cuid())   
-  userReview     String   @db.Text
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId   
+  userReview     String   
   locationName   String   @unique
   userName       String?    
 }

@@ -11,6 +11,7 @@ const LocationPage = () => {
   const { id, name, lat, lon, street, city, state, zip, phone, website } =
     router.query || {}
   const [machines, setMachines] = useState([])
+  const [reviews, setReviews] = useState([]) // Add state for reviews
   const mapRef = useRef(null)
   const setMapRef = useCallback((node) => {
     if (node !== null) {
@@ -59,6 +60,17 @@ const LocationPage = () => {
     }
   }, [lat, lon, mapRef])
 
+  useEffect(() => {
+    if (name) {
+      const fetchReviews = async () => {
+        const response = await fetch(`/api/reviews?locationName=${name}`)
+        const data = await response.json()
+        setReviews(data)
+      }
+      fetchReviews()
+    }
+  }, [name])
+
   return (
     <div className={styles.container}>
       {id && name && lat && lon && street && city && state && zip && (
@@ -89,6 +101,18 @@ const LocationPage = () => {
             ))}
           </div>
         </>
+      )}
+      <h2 className={styles.h2}>Reviews for {name}:</h2>
+      {reviews.length > 0 ? (
+        <div className={styles.reviewsGrid}>
+          {reviews.map((review) => (
+            <div key={review.id} className={styles.card}>
+              <p>{review.userReview}</p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p>No reviews for this location. Be the first to write a review!</p>
       )}
       <ReviewForm />
     </div>
