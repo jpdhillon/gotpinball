@@ -27,6 +27,7 @@
   font-weight: bold;
   display: flex;
   align-items: center;
+  font-size: .8rem;
 }
 
 .searchIcon {
