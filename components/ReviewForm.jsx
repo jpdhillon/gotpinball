@@ -41,7 +41,6 @@ const ReviewForm = ({ name, onReviewSubmitted }) => {
             id="freeform"
             name="freeform"
             rows="5"
-            cols="100"
             value={reviewText}
             onChange={(e) => setReviewText(e.target.value)}
           />

@@ -31,3 +31,23 @@
 .searchInput:focus {
   border-color: #666;
 }
+
+/* Adding media queries */
+@media (min-width: 768px) {
+  .searchHeading {
+    font-size: 2rem;
+    /* Adjust as needed */
+  }
+
+  .searchHeading2 {
+    font-size: 1.5rem;
+    /* Adjust as needed */
+  }
+
+  .searchInput {
+    font-size: 1rem;
+    /* Adjust as needed */
+    width: 75%;
+    /* Adjust as needed */
+  }
+}

@@ -37,31 +37,33 @@ const EventsLinks = () => {
         <div className={styles.heading}>
           <h1>Select region to see events: </h1>
         </div>
-        <div className={styles.menu}>
-          <div className='pure-menu pure-menu-scrollable custom-restricted'>
-            <ul className='pure-menu-list'>
-              {locations.map((location) => (
-                <li
-                  key={location.id}
-                  className='pure-menu-item'
-                  onClick={() => handleRegionClick(location.name)}
-                >
-                  <a href='#' className='pure-menu-link'>
-                    {location.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
+        <div className={styles.menuContainer}>
+          <div className={styles.menu}>
+            <div className='pure-menu pure-menu-scrollable custom-restricted'>
+              <ul className='pure-menu-list'>
+                {locations.map((location) => (
+                  <li
+                    key={location.id}
+                    className='pure-menu-item'
+                    onClick={() => handleRegionClick(location.name)}
+                  >
+                    <a href='#' className='pure-menu-link'>
+                      {location.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <style jsx>{`
+              .custom-restricted {
+                height: 160px;
+                width: 150px;
+                border: 1px solid gray;
+                border-radius: 4px;
+                overflow-y: scroll;
+              }
+            `}</style>
           </div>
-          <style jsx>{`
-            .custom-restricted {
-              height: 160px;
-              width: 150px;
-              border: 1px solid gray;
-              border-radius: 4px;
-              overflow-y: scroll;
-            }
-          `}</style>
         </div>
         {selectedRegion && (
           <div className={styles.events}>
@@ -72,7 +74,7 @@ const EventsLinks = () => {
                   <h3>Event: {event.name || 'N/A'}</h3>
                   <p>Description: {event.long_desc || 'N/A'}</p>
                   {event.external_link && (
-                    <p>
+                    <p className={styles.longLink}>
                       External Link:{' '}
                       <a
                         href={event.external_link}

@@ -42,12 +42,7 @@ const PinballMachines = () => {
   return (
     <>
       <div className={styles.hero}>
-        <img
-          src='/pinballRow.jpg'
-          alt='Pinball row'
-          layout='fill'
-          style={{ objectFit: 'cover', objectPosition: 'center' }}
-        />
+        <img src='/pinballRow.jpg' alt='Pinball row' className={styles.img} />
         <div className={styles.titleBar}>
           <h1>View pinball machines, listed alphabetically</h1>
         </div>

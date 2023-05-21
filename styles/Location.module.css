@@ -22,6 +22,10 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 }
 
+.longLink {
+  word-break: break-all;
+}
+
 .rightColumn {
   flex: 1;
   min-height: 400px;
@@ -60,4 +64,16 @@
 .h2 {
   margin-left: 1rem;
   font-size: 1.75rem;
+}
+
+.noReviews {
+  margin-left: 1rem;
+}
+
+@media (max-width: 600px) {
+
+  .leftColumn,
+  .rightColumn {
+    flex-basis: 100%;
+  }
 }

@@ -95,7 +95,11 @@ const LocationPage = () => {
                 {city}, {state} {zip}
               </p>
               <p>{phone}</p>
-              {website && <Link href={website}>{website}</Link>}
+              {website && (
+                <div className={styles.longLink}>
+                  <Link href={website}>{website}</Link>
+                </div>
+              )}
             </article>
             <div className={styles.rightColumn} ref={mapRef}></div>
           </div>
@@ -125,7 +129,9 @@ const LocationPage = () => {
           ))}
         </div>
       ) : (
-        <p>No reviews for this location. Be the first to write a review!</p>
+        <p className={styles.noReviews}>
+          No reviews for this location. Be the first to write a review!
+        </p>
       )}
       <ReviewForm name={name} onReviewSubmitted={fetchReviews} />
     </div>
