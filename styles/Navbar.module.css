@@ -23,6 +23,10 @@
   display: flex;
 }
 
+.navLinks.open {
+  display: block;
+}
+
 .navLinks li {
   margin-left: 1rem;
 }
@@ -44,8 +48,26 @@
   cursor: pointer;
 }
 
+.hamburger {
+  display: none; 
+}
+
 @media (max-width: 768px) {
-  .navLinks li:not(:last-child) {
+  .navLinks {
     display: none;
+    flex-direction: column;
+    position: absolute;
+    background-color: #634168;
+    top: 60px;
+    left: 0;
+    width: 100%;
+  }
+
+  .navLinks li {
+    margin: 1rem;
+  }
+
+  .hamburger {
+    display: block;
   }
 }

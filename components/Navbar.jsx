@@ -12,6 +12,7 @@ const Navbar = () => {
   const [searchResults, setSearchResults] = useState([]);
   const router = useRouter();
   const { data: session } = useSession();
+  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleSearchInputChange = (event) => {
     setSearchValue(event.target.value);
@@ -48,8 +49,11 @@ const Navbar = () => {
             <h1>Got Pinball</h1>
         </Link>
       </div>
+      <button className={styles.hamburger} onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}>
+        &#9776;
+      </button>
       <nav>
-        <ul className={styles.navLinks}>
+        <ul className={`${styles.navLinks} ${isMobileMenuOpen ? styles.open : ""}`}>
           <li>
             <Link href="/pinballMachines">Pinball Machines</Link>
           </li>
@@ -88,7 +92,7 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Navbar
 
 
 
