@@ -72,7 +72,9 @@ const EventsLinks = () => {
               {events.map((event, index) => (
                 <div key={index} className={styles.card}>
                   <h3>Event: {event.name || 'N/A'}</h3>
-                  <p>Description: {event.long_desc || 'N/A'}</p>
+                  <p className={styles.longLink}>
+                    Description: {event.long_desc || 'N/A'}
+                  </p>
                   {event.external_link && (
                     <p className={styles.longLink}>
                       External Link:{' '}
